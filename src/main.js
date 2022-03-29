@@ -12,7 +12,7 @@ import router from './routes'
 import './components/index'
 
 import './assets/tailwind.css'
-import '../lib/bootstrap/init'
+import './lib/bootstrap/init'
 import './assets/index.scss'
 
 const httpLink = createHttpLink()
