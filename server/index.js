@@ -30,8 +30,20 @@ dotenv.config()
 
 const userConfig = buildUserConfig()
 const db = knex({
-  client: 'mysql2',
-  connection: userConfig.database.connectionString,
+  client: 'mssql',
+  connection:  {
+    server: "den1.mssql7.gear.host", 
+    options: {
+      trustServerCertificate: true,
+    },
+    authentication: {
+      type: "default",
+      options: {  
+        userName: "agentonetest",
+        password: "Hh8qWUKW?5-o",
+      }
+    }
+  },
   pool: {
     // Putting min:0 fixes the idle timeout message of:
     // "Connection Error: Error: Connection lost: The server closed the connection."
@@ -40,6 +52,17 @@ const db = knex({
   },
 })
 Model.knex(db)
+// const db = knex({
+//   client: 'mssql',
+//   connection: userConfig.database.connectionString,
+//   pool: {
+//     // Putting min:0 fixes the idle timeout message of:
+//     // "Connection Error: Error: Connection lost: The server closed the connection."
+//     // See: https://stackoverflow.com/a/55858656/135101
+//     min: 0,
+//   },
+// })
+// Model.knex(db)
 
 const pubsub = new PubSub()
 
