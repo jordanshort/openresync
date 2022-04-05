@@ -387,8 +387,8 @@ async function startServer() {
   // I got these lines from https://stackoverflow.com/a/67926714/135101
   const httpServer = createServer(app)
   server.installSubscriptionHandlers(httpServer)
-  httpServer.listen(userConfig.server.port, () => {
-    console.log(`🚀 Server listening on port ${userConfig.server.port}`);
+  httpServer.listen((process.env.PORT || userConfig.server.port), () => {
+    console.log(`🚀 Server listening on port ${(process.env.PORT || userConfig.server.port)}`);
   })
 }
 
