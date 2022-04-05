@@ -25,8 +25,8 @@ const express = require('express')
 const { createServer } = require('http')
 const { displayStringFormat } = require('../lib/sync/utils/datetime')
 
-const dotenv = require('dotenv')
-dotenv.config()
+// const dotenv = require('dotenv')
+// dotenv.config()
 
 const userConfig = buildUserConfig()
 const db = knex({
