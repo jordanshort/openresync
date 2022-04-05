@@ -187,7 +187,7 @@ module.exports = () => ({
 
           // Optional. If not included, purges will not be performed.
           // Specify an array of cron strings for when the purge cron job(s) should be run.
-          cronStrings: ['10,25,40,55 * * * *'],
+          cronStrings: ['10,25,45,55 * * * *'],
         },
 
         // Optional. If not included, reconciles will not be performed.
