@@ -479,10 +479,10 @@ function getCronJobs(internalConfig) {
       const purgeCronEnabled = _.get(sourceConfig, 'cron.purge.enabled', true)
       if (purgeCronEnabled && purgeCronStrings.length) {
         for (const cronString of purgeCronStrings) {
-          const cronTime = cronString
+          // const cronTime = cronString
           // For debugging, start in a few seconds, rather than read the config
           // const m = moment().add(2, 'seconds')
-          // const cronTime = m.toDate()
+          // const cronTime = m
           const job = new CronJob(cronString, jobCountWrapper(`purge ${source.name}`, doPurge))
           jobs.push(job)
           const statsPurge = statsPurgeLib(db)
@@ -492,11 +492,12 @@ function getCronJobs(internalConfig) {
       const reconcileCronEnabled = _.get(sourceConfig, 'cron.reconcile.enabled', true)
       if (reconcileCronEnabled && reconcileCronStrings.length) {
         for (const cronString of reconcileCronStrings) {
-          const cronTime = cronString
+          //const cronTime = cronString
           // For debugging, start in a few seconds, rather than read the config
           // const m = moment().add(2, 'seconds')
-          // const cronTime = m.toDate()
+          // const cronTime = m
           const job = new CronJob(cronString, jobCountWrapper(`reconcile ${source.name}`, doReconcile))
+          // const job = new CronJob(cronString, jobCountWrapper(`reconcile ${source.name}`, doReconcile))
           jobs.push(job)
           const statsReconcile = statsReconcileLib(db)
           statsReconcile.listen(eventEmitter)
