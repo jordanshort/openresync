@@ -107,8 +107,8 @@ module.exports = () => ({
           type: 'cosmos',
           name: 'cosmos1',
           config: {
-            endpointUri: 'https://wfrmls.documents.azure.com:443/',
-            key: 'eFVuHP6DFKOZzl9KSsMwSufWg5c5onqXlfGPzVuq6jdvbFKVWaUByIUrljEqWSULPoo1E4weShG2sf8uonDzeg==',
+            endpointUri: process.env.WFRMLS_ENDPOINT,
+            key: process.env.AZURE_ACCESS_KEY,
             databaseId: 'IDX',
             // this sets the container name in cosmos
             makeTableName: name => 'URE_' + name,
@@ -214,7 +214,7 @@ module.exports = () => ({
   // This database is used for stats, such as keeping the history of the sync, e.g. when the sync (or purge) occurred,
   // how many records were synced per resource and destination, etc.
   database: {
-    connectionString: 'Data Source=den1.mssql7.gear.host;Initial Catalog=agentonetest;User ID=agentonetest;Password=Hh8qWUKW?5-o;MultipleActiveResultSets=True;',
+    connectionString: process.env.STAT_DB_CONNECTION_STRING,
   },
 })
 
