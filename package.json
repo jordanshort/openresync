@@ -44,6 +44,7 @@
     "moment-timezone": "^0.5.33",
     "moment-timezone-data-webpack-plugin": "^1.4.0",
     "mssql": "^8.0.2",
+    "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "objection": "^2.2.14",
     "pino": "^6.11.0",

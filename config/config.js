@@ -97,6 +97,7 @@ module.exports = () => ({
           expand: [
             {
               fieldName: 'Media',
+              name: 'Media'
             },
           ],
         },
@@ -104,14 +105,30 @@ module.exports = () => ({
 
       destinations: [
         {
-          type: 'cosmos',
-          name: 'cosmos1',
+          // Here's an example of a destination using the mysql data adapter.
+
+          // The type of the destination, which is 'mysql' or 'solr'.
+          type: 'mysql',
+
+          // The name should be thought of as an ID, meant for computers. It is arbitrary but must be unique among
+          // destinations.
+          name: 'mysql1',
+
+          // This is the config block specifically meant for the destination. It differs per destination. Here's an
+          // example for MySQL.
           config: {
-            endpointUri: process.env.WFRMLS_ENDPOINT,
-            key: process.env.AZURE_ACCESS_KEY,
-            databaseId: 'IDX',
-            // this sets the container name in cosmos
+            // The username, password, host, port, database name all wrapped into one.
+            connectionString: 'mysql://realconnect:Jmoney15!rco123@idx.mysql.database.azure.com:3306/idx',
+
+            // Optional
+            // makeTableName allows you to change the name of the table used. It takes the name of the resource and
+            // you should return a string. An example use case is if you are using a single database for multiple MLS
+            // sources, you might not want each to use the name 'Property' for a table name, so you could use a prefix
+            // perhaps based on the name of the MLS, e.g. abor_Property (for Austin Board of Realtors) and
+            // crmls_Property (for California Regional MLS). This is optional and if not specified, the resource name
+            // will be used.
             makeTableName: name => 'URE_' + name,
+
             // Optional
             // makeFieldName allows you to change the name of the field used. RESO Web API field names are
             // PascalCase, but you might prefer, for example, snake_case.
@@ -124,10 +141,12 @@ module.exports = () => ({
             // synchronizes table schema, which is handy when new fields are added or removed
             // over time. It takes the MLS resource name and should return a boolean. Default returns true.
             // If you return false, it means that you are responsible for creating the table as well as altering.
-            // don't need to for cosmos
-            shouldSyncTableSchema: function(mlsResourceName) {
-              return false;
-            }
+            // shouldSyncTableSchema: function(mlsResourceName) {
+            //   if (mlsResourceName === 'Media') {
+            //     return false
+            //   }
+            //   return true
+            // }
 
             // Optional
             // makeForeignKeyFieldName is used in the purge process. If, in the mlsResources section above, you use the
@@ -158,6 +177,61 @@ module.exports = () => ({
             // }
           },
         },
+        // {
+        //   type: 'cosmos',
+        //   name: 'cosmos1',
+        //   config: {
+        //     endpointUri: process.env.WFRMLS_ENDPOINT,
+        //     key: process.env.AZURE_ACCESS_KEY,
+        //     databaseId: 'IDX',
+        //     // this sets the container name in cosmos
+        //     makeTableName: name => 'URE_' + name,
+        //     // Optional
+        //     // makeFieldName allows you to change the name of the field used. RESO Web API field names are
+        //     // PascalCase, but you might prefer, for example, snake_case.
+        //     // Note: if you use the transform function, described below, the field names your function will receive are
+        //     // the keys from the object you return from transform().
+        //     // makeFieldName: name => 'myfieldprefix_' + name,
+
+        //     // Optional
+        //     // shouldSyncTableSchema allows you to opt out of a table's schema being synced. The MySQL data adapter
+        //     // synchronizes table schema, which is handy when new fields are added or removed
+        //     // over time. It takes the MLS resource name and should return a boolean. Default returns true.
+        //     // If you return false, it means that you are responsible for creating the table as well as altering.
+        //     // don't need to for cosmos
+        //     shouldSyncTableSchema: function(mlsResourceName) {
+        //       return false;
+        //     }
+
+        //     // Optional
+        //     // makeForeignKeyFieldName is used in the purge process. If, in the mlsResources section above, you use the
+        //     // 'expand' property to sync subresources, and the primary key of the subresource's table differs from the
+        //     // MLS's, you will need to use this. It's a function that takes in the parent MLS resource name, the sub-
+        //     // resource name, and the field name, and returns the name of your primary key.
+        //     // makeForeignKeyFieldName: (parentMlsResourceName, mlsResourceName, fieldName) => {
+        //     //   if (mlsResourceName === 'Media') {
+        //     //     if (parentMlsResourceName === 'Property') {
+        //     //       if (fieldName === 'ListingKey') {
+        //     //         return 'Content-ID'
+        //     //       }
+        //     //     }
+        //     //   }
+        //     //   return fieldName
+        //     // }
+
+        //     // Optional
+        //     // transform allows you to change the record of what would be inserted/updated in the database. If the only
+        //     // difference between what you want inserted/updated is the field names, then you should use the
+        //     // makeFieldName option. But this function would allow you to modify the data in any way, for example change
+        //     // keys, values, add key/value pairs, remove some, etc. It takes the MLS resource name, the record as
+        //     // downloaded, and the metadata object, and should return an object.
+        //     // Note: For the primary key's value, you may return null if your table's primary key is auto-incremented,
+        //     // which is the default.
+        //     // transform: (mlsResourceName, record, metadata) => {
+        //     //   // Return an object. Do not mutate record.
+        //     // }
+        //   },
+        // },
       ],
 
       // Optional
@@ -187,7 +261,7 @@ module.exports = () => ({
 
           // Optional. If not included, purges will not be performed.
           // Specify an array of cron strings for when the purge cron job(s) should be run.
-          cronStrings: ['10,25,45,55 * * * *'],
+          cronStrings: ['10,25,40,55 * * * *'],
         },
 
         // Optional. If not included, reconciles will not be performed.
@@ -198,7 +272,7 @@ module.exports = () => ({
 
           // Optional. If not included, reconciles will not be performed.
           // Specify an array of cron strings for when the reconcile cron job(s) should be run.
-          cronStrings: ['5,35 * * * *']
+          cronStrings: ['5,20,35,50 * * * *']
         },
       },
     },
@@ -214,7 +288,8 @@ module.exports = () => ({
   // This database is used for stats, such as keeping the history of the sync, e.g. when the sync (or purge) occurred,
   // how many records were synced per resource and destination, etc.
   database: {
-    connectionString: process.env.STAT_DB_CONNECTION_STRING,
+    connectionString: 'mysql://realconnect:Jmoney15!rco123@idx.mysql.database.azure.com:3306/idx',
+    // connectionString: process.env.STAT_DB_CONNECTION_STRING,
   },
 })
 

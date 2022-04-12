@@ -25,36 +25,25 @@ const express = require('express')
 const { createServer } = require('http')
 const { displayStringFormat } = require('../lib/sync/utils/datetime')
 
-// const dotenv = require('dotenv')
-// dotenv.config()
+const dotenv = require('dotenv')
+dotenv.config()
 
 const userConfig = buildUserConfig()
-const db = knex({
-  client: 'mssql',
-  connection:  {
-    server: "den1.mssql7.gear.host", 
-    options: {
-      trustServerCertificate: true,
-    },
-    authentication: {
-      type: "default",
-      options: {  
-        userName: "agentonetest",
-        password: "Hh8qWUKW?5-o",
-      }
-    }
-  },
-  pool: {
-    // Putting min:0 fixes the idle timeout message of:
-    // "Connection Error: Error: Connection lost: The server closed the connection."
-    // See: https://stackoverflow.com/a/55858656/135101
-    min: 0,
-  },
-})
-Model.knex(db)
 // const db = knex({
 //   client: 'mssql',
-//   connection: userConfig.database.connectionString,
+//   connection:  {
+//     server: "den1.mssql7.gear.host", 
+//     options: {
+//       trustServerCertificate: true,
+//     },
+//     authentication: {
+//       type: "default",
+//       options: {  
+//         userName: "agentonetest",
+//         password: "Hh8qWUKW?5-o",
+//       }
+//     }
+//   },
 //   pool: {
 //     // Putting min:0 fixes the idle timeout message of:
 //     // "Connection Error: Error: Connection lost: The server closed the connection."
@@ -63,6 +52,17 @@ Model.knex(db)
 //   },
 // })
 // Model.knex(db)
+const db = knex({
+  client: 'mysql',
+  connection: userConfig.database.connectionString,
+  pool: {
+    // Putting min:0 fixes the idle timeout message of:
+    // "Connection Error: Error: Connection lost: The server closed the connection."
+    // See: https://stackoverflow.com/a/55858656/135101
+    min: 0,
+  },
+})
+Model.knex(db)
 
 const pubsub = new PubSub()
 
@@ -466,11 +466,11 @@ function getCronJobs(internalConfig) {
       const syncCronEnabled = _.get(sourceConfig, 'cron.sync.enabled', true)
       if (syncCronEnabled && syncCronStrings.length) {
         for (const cronString of syncCronStrings) {
-          const cronTime = cronString
+          // const cronTime = cronString
           // For debugging, start in a few seconds, rather than read the config
           // const m = moment().add(2, 'seconds')
-          // const cronTime = m.toDate()
-          const job = new CronJob(cronTime, jobCountWrapper(`sync ${source.name}`, doSync))
+          // const cronTime = m
+          const job = new CronJob(cronString, jobCountWrapper(`sync ${source.name}`, doSync))
           jobs.push(job)
           const statsSync = statsSyncLib(db)
           statsSync.listen(eventEmitter)
