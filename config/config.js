@@ -127,7 +127,7 @@ module.exports = () => ({
             // perhaps based on the name of the MLS, e.g. abor_Property (for Austin Board of Realtors) and
             // crmls_Property (for California Regional MLS). This is optional and if not specified, the resource name
             // will be used.
-            makeTableName: name => 'URE_' + name,
+            makeTableName: name => 'ure_' + name,
 
             // Optional
             // makeFieldName allows you to change the name of the field used. RESO Web API field names are
@@ -250,7 +250,7 @@ module.exports = () => ({
 
           // Optional. If not included, syncs will not be performed.
           // Specify an array of cron strings for when the sync cron job(s) should be run.
-          cronStrings: ['0,15,30,45 * * * *'],
+          cronStrings: ['10,25,40,55 * * * *'],
         },
 
         // Optional. If not included, purges will not be performed.
@@ -261,7 +261,7 @@ module.exports = () => ({
 
           // Optional. If not included, purges will not be performed.
           // Specify an array of cron strings for when the purge cron job(s) should be run.
-          cronStrings: ['10,25,40,55 * * * *'],
+          cronStrings: ['0,15,30,45 * * * *'],
         },
 
         // Optional. If not included, reconciles will not be performed.
