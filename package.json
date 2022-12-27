@@ -1,6 +1,10 @@
 {
   "name": "openresync",
   "version": "0.2.0",
+  "engines": {
+    "node": "12.18.3",
+    "npm": "6.14.6"
+  },
   "private": true,
   "scripts": {
     "dev": "nodemon --watch server/ --watch lib/ --watch tests/qa/ --watch tests/fixtures/",
