@@ -250,7 +250,7 @@ module.exports = () => ({
 
           // Optional. If not included, syncs will not be performed.
           // Specify an array of cron strings for when the sync cron job(s) should be run.
-          cronStrings: ['10,25,40,55 * * * *'],
+          cronStrings: ['0,15,30,45 * * * *'],
         },
 
         // Optional. If not included, purges will not be performed.
@@ -261,7 +261,7 @@ module.exports = () => ({
 
           // Optional. If not included, purges will not be performed.
           // Specify an array of cron strings for when the purge cron job(s) should be run.
-          cronStrings: ['0,15,30,45 * * * *'],
+          cronStrings: ['20 * * * *'],
         },
 
         // Optional. If not included, reconciles will not be performed.
@@ -272,7 +272,7 @@ module.exports = () => ({
 
           // Optional. If not included, reconciles will not be performed.
           // Specify an array of cron strings for when the reconcile cron job(s) should be run.
-          cronStrings: ['5,20,35,50 * * * *']
+          cronStrings: ['50 * * * *']
         },
       },
     },
