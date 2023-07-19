@@ -492,9 +492,9 @@ function getCronJobs(internalConfig) {
         for (const cronString of reconcileCronStrings) {
           //const cronTime = cronString
           // For debugging, start in a few seconds, rather than read the config
-          const m = moment().add(2, 'seconds')
-          const cronTime = m
-          const job = new CronJob(cronTime, jobCountWrapper(`reconcile ${source.name}`, doReconcile))
+          // const m = moment().add(2, 'seconds')
+          // const cronTime = m
+          const job = new CronJob(cronString, jobCountWrapper(`reconcile ${source.name}`, doReconcile))
           // const job = new CronJob(cronString, jobCountWrapper(`reconcile ${source.name}`, doReconcile))
           jobs.push(job)
           const statsReconcile = statsReconcileLib(db)
